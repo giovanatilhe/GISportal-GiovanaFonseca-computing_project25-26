@@ -1,4 +1,4 @@
-FROM ubuntu:20.04
+FROM --platform=linux/amd64 ubuntu:20.04
 
 LABEL maintainer="Pete Walker <petwa@pml.ac.uk>"
 
@@ -80,13 +80,15 @@ RUN cd /var/portal/GISportal \
 
 # Add all code
 ADD --chown=portal:portal . /var/portal/GISportal/
+RUN chmod +x /var/portal/GISportal/docker-run.sh
+
 
 # Final build
 RUN cd /var/portal/GISportal \
     && source /var/portal/.bashrc \
     && grunt
 
-VOLUME /var/portal/GISportal/config
+
 
 WORKDIR /var/portal/GISportal
 CMD ["/var/portal/GISportal/docker-run.sh"]

@@ -15,13 +15,16 @@ cd /var/portal/GISportal
 /usr/bin/redis-server --daemonize yes; 
 
 source /var/portal/.nvm/nvm.sh
+mkdir -p /var/portal/GISportal/logs
+chmod 777 /var/portal/GISportal/logs
 
 # start the app
 while true
 do
     #/usr/bin/node /var/portal/GISportal/app.js > /var/portal/GISportal/config/app.log
     #nvm run v10.24.1 --inspect-brk=0.0.0.0 /var/portal/GISportal/app.js >> /var/portal/GISportal/config/app.log
-    nvm run v10.24.1 /var/portal/GISportal/app.js >> /var/portal/GISportal/config/app.log
+
+nvm run v10.24.1 /var/portal/GISportal/app.js >> /var/portal/GISportal/logs/app.log 2>&1
     #nvm run v6.17.1 /var/portal/GISportal/app.js >> /var/portal/GISportal/config/app.log
     sleep 600
 done

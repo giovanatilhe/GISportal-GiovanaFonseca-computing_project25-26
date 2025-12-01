@@ -1,15 +1,10 @@
-version: '3.1'
-
 services:
-
   gisportal:
     container_name: gisportal
-    #image: container.pml.space/web-development/e-shape/dive-frontend
-    build: gisportal
+    platform: linux/amd64
+    build: .
     ports:
       - "80:6789"
       - "9229:9229"
     volumes:
-      - /usr/share/GISportal:/var/portal/GISportal/config
-
-
+      - ./config:/var/portal/GISportal/config
