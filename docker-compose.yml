@@ -7,4 +7,4 @@ services:
       - "80:6789"
       - "9229:9229"
     volumes:
-      - /Users/giovanatilhe/Documents/computing project/GISportal/config:/usr/src/app/config
+      - "/Users/giovanatilhe/Documents/computing project/GISportal/config:/var/portal/GISportal/config"
