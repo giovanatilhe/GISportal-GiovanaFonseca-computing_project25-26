@@ -1,30 +1,28 @@
 #!/bin/bash
-#
-#  This script is the ENTRYPOINT for the docker container; it starts a Redis daemon and
-#  fires up node.
-#
 
-# Add the plotting and extractor paths to python
+# Add python library paths
 export PYTHONPATH="$PYTHONPATH:/var/portal/GISportal/plotting:/var/portal/GISportal/plotting/data_extractor"
 
-# build the app from the source files
-cd /var/portal/GISportal
-#grunt
+# Start Redis
+redis-server --daemonize yes
 
-#start redis
-/usr/bin/redis-server --daemonize yes; 
+# Load NVM properly (installed in /var/portal/.nvm AND sourced via .bashrc)
+export NVM_DIR="/var/portal/.nvm"
+source "$NVM_DIR/nvm.sh"
+source /var/portal/.bashrc
 
-source /var/portal/.nvm/nvm.sh
+# Create logs directory
 mkdir -p /var/portal/GISportal/logs
 chmod 777 /var/portal/GISportal/logs
 
-# start the app
+# Run GISportal (Node.js 10)
+echo "Starting GISportal..."
+nvm use 10
+
+# keep restarting if it crashes
 while true
 do
-    #/usr/bin/node /var/portal/GISportal/app.js > /var/portal/GISportal/config/app.log
-    #nvm run v10.24.1 --inspect-brk=0.0.0.0 /var/portal/GISportal/app.js >> /var/portal/GISportal/config/app.log
-
-nvm run v10.24.1 /var/portal/GISportal/app.js >> /var/portal/GISportal/logs/app.log 2>&1
-    #nvm run v6.17.1 /var/portal/GISportal/app.js >> /var/portal/GISportal/config/app.log
-    sleep 600
+    node app.js >> /var/portal/GISportal/logs/app.log 2>&1
+    echo "GISportal crashed, restarting in 10 seconds..."
+    sleep 10
 done
